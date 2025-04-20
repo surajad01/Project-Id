@@ -96,15 +96,30 @@
   
   .photo-container {
     position: relative;
-    background-color: #e9ecef;
+    background-color: #f8f9fa; /* Light fallback color */
+    height: 200px; /* Fixed height */
+    overflow: hidden; /* Contain the image */
   }
   
   .student-photo {
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
     display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensures image covers area without distortion */
+    object-position: center; /* Centers the image */
+    /* Fallback if image fails to load */
+    background-color: #e9ecef;
+    background-image: url('../images/placeholder.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
   }
+  /* ===== EMPTY STATE STYLING ===== */
+.student-photo:not([src]),
+.student-photo[src=""] {
+  opacity: 0.7; /* Slightly transparent placeholder */
+  background-image: url('../images/placeholder.jpg');
+}
   
   .capture-btn {
     width: 100%;
@@ -274,6 +289,11 @@
     .camera-view-container, .cropping-view {
       height: 300px;
     }
+    
+      .photo-container {
+        height: 180px; /* Slightly smaller on tablets */
+      }
+    
   }
   
   @media (max-width: 576px) {
@@ -297,6 +317,9 @@
     .camera-controls button {
       flex: 100%;
     }
+    .photo-container {
+      height: 160px; /* Smaller on mobile */
+    }
   }
   
   /* Cropper.js overrides */
@@ -316,3 +339,4 @@
     width: 8px;
     height: 8px;
   }
+ 
