@@ -4,46 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Student ID Card System</title>
-    <!-- Connect CSS -->
+    <!-- CSS (we'll add this later) -->
     <link rel="stylesheet" href="style.css">
-    <!-- Add these in your head section -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <!-- Cropper.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
 </head>
 <body>
+    <!-- Main App Container -->
     <div class="app-container">
-        <h1>Student ID Manager</h1>
+        <header class="app-header">
+            <h1>Student ID Manager</h1>
+        </header>
+
+        <!-- Class Filter Section -->
         <div class="class-selector">
-            <!-- Will add class selection UI here -->
+            <label for="class-filter">Filter by Class:</label>
+            <select id="class-filter" class="class-filter">
+                <option value="">All Classes</option>
+                <option value="5A">Class 5A</option>
+                <option value="5B">Class 5B</option>
+                <option value="5C">Class 5C</option>
+            </select>
         </div>
-        <div class="student-list">
-            <div class="photo-container">
-                <img src="./images/placeholder.jpg" alt="Student Photo" class="student-photo" id="photo-1">
-                <button class="capture-btn">Take Photo</button>
-            </div>
-            <div class="student-info">
-                <h3>John Doe</h3>
-                <p>Class: 5A</p>
-                <p>Roll No: 25</p>
-            </div>
+
+        <!-- Student List Container -->
+        <div class="student-list" id="student-list">
+            <!-- Student cards will be inserted here by JavaScript -->
         </div>
     </div>
-    <!-- Camera Modal -->
+
+    <!-- Camera Modal (hidden by default) -->
     <div class="modal" id="camera-modal">
         <div class="modal-content">
             <span class="close-btn">&times;</span>
             <h2>Take Student Photo</h2>
+            
             <div class="camera-container">
                 <!-- Camera View -->
                 <div class="camera-view-container" id="camera-view-container">
                     <video id="camera-view" autoplay playsinline></video>
                 </div>
                 
-                <!-- Cropping View (initially hidden) -->
+                <!-- Cropping View (hidden initially) -->
                 <div class="cropping-view" id="cropping-view" style="display:none;">
                     <img id="photo-to-crop" src="" alt="Captured Photo">
                 </div>
                 
+                <!-- Camera Controls -->
                 <div class="camera-controls">
                     <button id="capture-btn">Capture Photo</button>
                     <button id="retry-btn" style="display:none;">Retry</button>
@@ -54,7 +61,9 @@
         </div>
     </div>
 
-    <!-- Connect JavaScript -->
+    <!-- JavaScript Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+    <!-- Our JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>
