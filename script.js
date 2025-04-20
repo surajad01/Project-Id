@@ -73,6 +73,14 @@ document.addEventListener('DOMContentLoaded', function() {
             
             studentList.appendChild(card);
         });
+ // Reattach event listeners to ALL capture buttons
+ document.querySelectorAll('.capture-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        currentStudentCard = this.closest('.student-card');
+        openCameraModal();
+    });
+});
+
     }
 
     function openCameraModal() {

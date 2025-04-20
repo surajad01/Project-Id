@@ -130,6 +130,9 @@
     font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
+    position: relative; /* Ensure it stays visible */
+  z-index: 2; /* Above other elements */
+  margin-top: 10px; /* Space between photo and button */
     transition: var(--transition);
   }
   
