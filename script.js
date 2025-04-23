@@ -14,11 +14,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const photoToCrop = document.getElementById('photo-to-crop');
     const classFilter = document.getElementById('class-filter');
     const studentList = document.getElementById('student-list');
+    const addStudentBtn = document.getElementById('add-student');
+    const exportBtn = document.getElementById('export-data');
+    const editModal = document.getElementById('edit-modal');
+    const editForm = document.getElementById('edit-form');
 
     // ======================
     // Sample Data
     // ======================
-    const students = [
+    let students = [
         { id: 1, name: "John Doe", class: "5A", rollNo: 25 },
         { id: 2, name: "Jane Smith", class: "5A", rollNo: 26 },
         { id: 3, name: "Michael Johnson", class: "5A", rollNo: 27 },
@@ -33,6 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
     let cropper = null;
     let currentStudentCard = null;
     let currentStream = null;
+    let currentEditStudent = null;
 
     // ======================
     // Initialization
@@ -68,19 +73,12 @@ document.addEventListener('DOMContentLoaded', function() {
                     <h3>${student.name}</h3>
                     <p>Class: ${student.class}</p>
                     <p>Roll No: ${student.rollNo}</p>
+                    <button class="edit-btn">Edit Details</button>
                 </div>
             `;
             
             studentList.appendChild(card);
         });
- // Reattach event listeners to ALL capture buttons
- document.querySelectorAll('.capture-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-        currentStudentCard = this.closest('.student-card');
-        openCameraModal();
-    });
-});
-
     }
 
     function openCameraModal() {
@@ -140,19 +138,97 @@ document.addEventListener('DOMContentLoaded', function() {
         closeCameraModal();
     }
 
+    function showEditModal(student = null) {
+        currentEditStudent = student;
+        
+        if(student) {
+            document.getElementById('edit-name').value = student.name;
+            document.getElementById('edit-class').value = student.class;
+            document.getElementById('edit-roll').value = student.rollNo;
+        } else {
+            editForm.reset();
+        }
+        
+        editModal.style.display = 'block';
+    }
+
+    function closeEditModal() {
+        editModal.style.display = 'none';
+        currentEditStudent = null;
+    }
+
+    function handleEditSubmit(e) {
+        e.preventDefault();
+        
+        const updatedStudent = {
+            name: document.getElementById('edit-name').value.trim(),
+            class: document.getElementById('edit-class').value,
+            rollNo: parseInt(document.getElementById('edit-roll').value)
+        };
+        
+        if (!updatedStudent.name || isNaN(updatedStudent.rollNo)) {
+            alert('Please fill all required fields with valid values');
+            return;
+        }
+
+        if(currentEditStudent) {
+            // Update existing student
+            Object.assign(currentEditStudent, updatedStudent);
+        } else {
+            // Add new student
+            updatedStudent.id = students.length + 1;
+            students.push(updatedStudent);
+        }
+        
+        generateStudentCards(classFilter.value || null);
+        closeEditModal();
+    }
+
+    function exportToCSV() {
+        const csvContent = [
+            ['ID', 'Name', 'Class', 'Roll Number', 'Photo URL'],
+            ...students.map(student => [
+                student.id,
+                `"${student.name}"`,
+                student.class,
+                student.rollNo,
+                localStorage.getItem(`student-${student.id}`) || 'No Photo'
+            ])
+        ].map(row => row.join(',')).join('\n');
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        const url = URL.createObjectURL(blob);
+        
+        link.setAttribute('href', url);
+        link.setAttribute('download', 'students.csv');
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
     // ======================
     // Helper Functions
     // ======================
     function setupEventListeners() {
-        // Delegated event listener for capture buttons
+        // Student list interactions
         studentList.addEventListener('click', function(e) {
+            const card = e.target.closest('.student-card');
+            if (!card) return;
+
             if (e.target.classList.contains('capture-btn')) {
-                currentStudentCard = e.target.closest('.student-card');
+                currentStudentCard = card;
                 openCameraModal();
+            }
+            
+            if (e.target.classList.contains('edit-btn')) {
+                const studentId = parseInt(card.querySelector('.student-photo').id.split('-')[1]);
+                const student = students.find(s => s.id === studentId);
+                showEditModal(student);
             }
         });
 
-        // Modal controls
+        // Camera modal controls
         closeBtn.addEventListener('click', closeCameraModal);
         captureBtn.addEventListener('click', capturePhoto);
         retryBtn.addEventListener('click', retryPhoto);
@@ -163,6 +239,12 @@ document.addEventListener('DOMContentLoaded', function() {
         classFilter.addEventListener('change', function() {
             generateStudentCards(this.value || null);
         });
+
+        // Edit modal controls
+        addStudentBtn.addEventListener('click', () => showEditModal());
+        exportBtn.addEventListener('click', exportToCSV);
+        editForm.addEventListener('submit', handleEditSubmit);
+        document.querySelector('.cancel-btn').addEventListener('click', closeEditModal);
     }
 
     function resetCameraView() {

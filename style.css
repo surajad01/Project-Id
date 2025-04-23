@@ -85,6 +85,9 @@
     background-color: white;
     border-radius: var(--border-radius);
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     box-shadow: var(--box-shadow);
     transition: var(--transition);
   }
@@ -224,7 +227,12 @@
     display: block;
     margin: 0 auto;
   }
-  
+  .controls {
+    padding: 15px 20px;
+    display: flex;
+    gap: 15px;
+    border-bottom: 1px solid #e9ecef;
+}
   .camera-controls {
     display: flex;
     gap: 10px;
@@ -247,7 +255,16 @@
     background-color: var(--primary-color);
     color: white;
   }
-  
+  .action-btn {
+    padding: 10px 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
   #capture-btn:hover {
     background-color: var(--secondary-color);
   }
@@ -303,13 +320,19 @@
     body {
       padding: 10px;
     }
-    
+    .student-card {
+      display: flex; /* Switch to horizontal layout */
+      align-items: center;
+      gap: 15px;
+      padding: 12px;
+      height: auto; /* Remove fixed height */
+    }
     .student-list {
       grid-template-columns: 1fr;
     }
     
     .student-photo {
-      height: 180px;
+      height: 100%; /* Fill container */
     }
     
     .modal-content {
@@ -321,7 +344,9 @@
       flex: 100%;
     }
     .photo-container {
-      height: 160px; /* Smaller on mobile */
+      width: 100px; /* Fixed width for photo */
+      height: 120px; /* Slightly taller than square */
+      flex-shrink: 0; /* Prevent shrinking */
     }
   }
   
@@ -331,15 +356,45 @@
     outline-color: rgba(67, 97, 238, 0.5);
     outline-width: 2px;
   }
-  
+  .student-info {
+    flex: 1; /* Take remaining space */
+    overflow: visible; /* Ensure text is visible */
+    padding: 0; /* Remove padding */
+  }
   .cropper-line {
     background-color: var(--primary-color);
   }
-  
+  .student-info h3 {
+    font-size: 1rem; /* Slightly smaller */
+    margin-bottom: 4px;
+    white-space: normal; /* Allow text wrapping */
+  }
+
+  .student-info p {
+    font-size: 0.85rem;
+    margin-bottom: 2px;
+    display: block; /* Ensure visibility */
+  }
+
+  .capture-btn {
+    padding: 8px;
+    font-size: 0.8rem;
+    position: relative; /* Remove absolute positioning */
+    margin-top: 8px;
+    width: 100%;
+  }
   .cropper-point {
     background-color: var(--primary-color);
     opacity: 1;
     width: 8px;
     height: 8px;
   }
- 
+  @media (max-width: 350px) {
+    .photo-container {
+      width: 80px;
+      height: 100px;
+    }
+    .student-info h3 {
+      font-size: 0.9rem;
+    }
+  }

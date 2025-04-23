@@ -26,13 +26,43 @@
                 <option value="5C">Class 5C</option>
             </select>
         </div>
-
+        <div class="controls">
+            <button id="add-student" class="action-btn">Add New Student</button>
+            <button id="export-data" class="action-btn">Export to CSV</button>
+        </div>
         <!-- Student List Container -->
         <div class="student-list" id="student-list">
             <!-- Student cards will be inserted here by JavaScript -->
         </div>
     </div>
-
+    <div class="modal" id="edit-modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Edit Student Details</h2>
+            <form id="edit-form">
+                <div class="form-group">
+                    <label for="edit-name">Full Name:</label>
+                    <input type="text" id="edit-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="edit-class">Class:</label>
+                    <select id="edit-class" required>
+                        <option value="5A">5A</option>
+                        <option value="5B">5B</option>
+                        <option value="5C">5C</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="edit-roll">Roll Number:</label>
+                    <input type="number" id="edit-roll" required>
+                </div>
+                <div class="form-buttons">
+                    <button type="submit" class="save-btn">Save Changes</button>
+                    <button type="button" class="cancel-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
     <!-- Camera Modal (hidden by default) -->
     <div class="modal" id="camera-modal">
         <div class="modal-content">
